@@ -1,5 +1,5 @@
-#include <AccelStepper.h>
 #include <MultiStepper.h>
+#include <AccelStepper.h>
 
 #define LIDAR_TRIG_PIN 2
 #define LIDAR_MON_PIN 3
@@ -8,9 +8,10 @@
 #define ALTI_DIR_PIN 8 // UNO Pin 8 connected to DIR pin of Easy Driver
 #define ALTI_SLEEP_PIN 10
 
-#define AZI_STEP_PIN 7
-#define AZI_DIR_PIN 6
-#define AZI_SLEEP_PIN 5
+#define AZI_STEP_PIN 6
+#define AZI_DIR_PIN 5
+#define AZI_SLEEP_PIN 7
+
 
 #define AZI_MAX 800
 #define ALT_MAX 266
@@ -20,7 +21,6 @@ int distance;
 int i;
 // AccelStepper Setup
 AccelStepper StepperAlti(1, ALTI_STEP_PIN, ALTI_DIR_PIN);   // 1 = Step/Dir interface
-
 AccelStepper StepperAzi(1, AZI_STEP_PIN, AZI_DIR_PIN);
 
 int Alti;  // Used to store the X value entered in the Serial Monitor
@@ -56,13 +56,13 @@ void setup() {
 // If running full program, nest for loops, outer loop incrementing alt, inner loop incrementing azi
 void loop() {
    for (Azi = 0; Azi < AZI_MAX; Azi++) {
-      // StepperAlti.moveTo(Alti);  // Set new move position for X Stepper
+      StepperAlti.moveTo(Alti);  // Set new move position for X Stepper
       StepperAzi.moveTo(Azi);  // Set new move position for Z Stepper
 
       // Check if the Steppers have reached desired position
-      /*if (StepperAlti.distanceToGo()) {
+      if (StepperAlti.distanceToGo() !=0) {
          StepperAlti.run();  // Move Stepper X into position
-      }*/
+      }
 
       Serial.print("Moving to new pos..."); // for debugging, delete if works right
       if (StepperAzi.distanceToGo() != 0) {
