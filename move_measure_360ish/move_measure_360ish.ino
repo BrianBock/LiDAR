@@ -4,8 +4,8 @@
 #define LIDAR_TRIG_PIN 2
 #define LIDAR_MON_PIN 3
 
-//Motor 1 = Azi
-//Motor 2 = Alti
+//Motor 1 = Azi motor
+//Motor 2 = Alti motor
 #define ALTI_STEP_PIN 9 // UNO Pin 9 connected to STEP pin of Easy Driver
 #define ALTI_DIR_PIN 8 // UNO Pin 8 connected to DIR pin of Easy Driver
 #define ALTI_SLEEP_PIN 10
