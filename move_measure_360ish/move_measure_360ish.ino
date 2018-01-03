@@ -64,7 +64,6 @@ void loop() {
          StepperAlti.run();  // Move Stepper X into position
       }
 
-      Serial.print("Moving to new pos..."); // for debugging, delete if works right
       if (StepperAzi.distanceToGo() != 0) {
          StepperAzi.run();  // Move Stepper Z into position
       }
@@ -77,7 +76,7 @@ void loop() {
       distance = __getDistance();
 
       Serial.print("Distance: ");
-      Serial.println(distance); // Print the distance
+      Serial.println(distance); // Print the distance measured by the LIDAR
 
 
       //Serial.print(Azi);
