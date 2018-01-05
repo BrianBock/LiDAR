@@ -34,7 +34,7 @@ void setup() {
 
    pinMode(AZI_SLEEP_PIN, OUTPUT);
    digitalWrite(AZI_SLEEP_PIN, HIGH); //turns on driver
-   
+
    pinMode(ALTI_SLEEP_PIN, OUTPUT);
    digitalWrite(ALTI_SLEEP_PIN, HIGH); //turns on driver
 
@@ -53,42 +53,46 @@ void setup() {
 
 }
 
-//Commented out all calls to altitude motor, don't run it if it's not going to change. Also need to give Alt and Azi values before you use them
 
-// If running full program, nest for loops, outer loop incrementing alt, inner loop incrementing azi
 void loop() {
-   for (Azi = 0; Azi < AZI_MAX; Azi++) {
+   for (Alti = 0; Alti < ALT_MAX; Alti++) {
       StepperAlti.moveTo(Alti);  // Set new move position for X Stepper
-      StepperAzi.moveTo(Azi);  // Set new move position for Z Stepper
 
       // Check if the Steppers have reached desired position
-      if (StepperAlti.distanceToGo() !=0) {
+      if (StepperAlti.distanceToGo()) {
          StepperAlti.run();  // Move Stepper X into position
       }
 
-      if (StepperAzi.distanceToGo() != 0) {
-         StepperAzi.run();  // Move Stepper Z into position
+      
+      for (Azi = 0; Azi < AZI_MAX; Azi ++) {
+        StepperAzi.moveTo(Azi);  // Set new move position for Z Stepper
+
+        if (StepperAzi.distanceToGo()) {
+           StepperAzi.run();  // Move Stepper Z into position
+        }
+        Serial.print("Azi Pos: ");
+        Serial.print(Azi);
+        Serial.print(" ");
+        distance = __getDistance();
+
+        Serial.print("Distance: ");
+        Serial.println(distance); // Print the distance measured by the LIDAR
+        delay(15);
+
       }
-      Serial.println("Done!"); // Debugging part 2
 
-
-      Serial.print("Azi Pos: ");
-      Serial.print(Azi);
-      Serial.print(" ");
-      distance = __getDistance();
-
-      Serial.print("Distance: ");
-      Serial.println(distance); // Print the distance measured by the LIDAR
-
-
-      //Serial.print(Azi);
-      //Serial.println(" Azi Travel ");
+      // Serial.println("Done!"); // Debugging part 2
 
    }
-   StepperAzi.moveTo(0); // Reset stepper position, should go in reverse, if not add reverse for loop with calls to moveTo
-   while (StepperAzi.distanceToGo()) {
+   StepperAzi.moveTo(0);
+   StepperAlti.moveTo(0);
+   if (StepperAzi.distanceToGo()) {
     StepperAzi.run();
    }
+   if (StepperAlti.distanceToGo()) {
+     StepperAlti.run();
+   }
+
    Serial.println("COMPLETED!");
 }
 
