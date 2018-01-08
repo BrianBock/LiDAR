@@ -15,7 +15,7 @@
 #define AZI_SLEEP_PIN 7
 
 
-#define AZI_MAX 800
+#define AZI_MAX 1600
 #define ALT_MAX 266
 
 unsigned long pulseWidth;
