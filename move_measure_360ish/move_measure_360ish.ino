@@ -56,44 +56,37 @@ void setup() {
 
 void loop() {
    for (Alti = 0; Alti < ALT_MAX; Alti++) {
-      StepperAlti.moveTo(Alti);  // Set new move position for X Stepper
+      __moveMotor(StepperAlti, Alti);
 
-      // Check if the Steppers have reached desired position
-      if (StepperAlti.distanceToGo()) {
-         StepperAlti.run();  // Move Stepper X into position
-      }
 
-      
       for (Azi = 0; Azi < AZI_MAX; Azi ++) {
-        StepperAzi.moveTo(Azi);  // Set new move position for Z Stepper
+         __moveMotor(StepperAzi, Azi);
 
-        if (StepperAzi.distanceToGo()) {
-           StepperAzi.run();  // Move Stepper Z into position
-        }
-        Serial.print("Azi Pos: ");
-        Serial.print(Azi);
-        Serial.print(" ");
-        distance = __getDistance();
+         Serial.print("Azi Pos: ");
+         Serial.print(Azi);
+         Serial.print(" ");
+         distance = __getDistance();
 
-        Serial.print("Distance: ");
-        Serial.println(distance); // Print the distance measured by the LIDAR
-        delay(15);
+         Serial.print("Distance: ");
+         Serial.println(distance); // Print the distance measured by the LIDAR
+         delay(15);
 
       }
+      __moveMotor(StepperAzi, 0);
 
       // Serial.println("Done!"); // Debugging part 2
 
    }
-   StepperAzi.moveTo(0);
-   StepperAlti.moveTo(0);
-   if (StepperAzi.distanceToGo()) {
-    StepperAzi.run();
-   }
-   if (StepperAlti.distanceToGo()) {
-     StepperAlti.run();
-   }
+   __moveMotor(StepperAlti, 0);
 
    Serial.println("COMPLETED!");
+}
+
+void __moveMotor(AccelStepper motor, int position) {
+   motor.moveTo(position);
+   if (motor.distanceToGo()) {
+      motor.run();
+   }
 }
 
 int __getDistance() {
