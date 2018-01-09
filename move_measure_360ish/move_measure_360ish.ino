@@ -15,7 +15,7 @@
 #define AZI_SLEEP_PIN 7
 
 
-#define AZI_MAX 1600
+#define AZI_MAX 800
 #define ALT_MAX 266
 
 unsigned long pulseWidth;
@@ -32,71 +32,76 @@ int move_finished = 1; // Used to check if move is completed
 
 void setup() {
 
-   pinMode(AZI_SLEEP_PIN, OUTPUT);
-   digitalWrite(AZI_SLEEP_PIN, HIGH); //turns on driver
+  pinMode(AZI_SLEEP_PIN, OUTPUT);
+  digitalWrite(AZI_SLEEP_PIN, HIGH); //turns on driver
 
-   pinMode(ALTI_SLEEP_PIN, OUTPUT);
-   digitalWrite(ALTI_SLEEP_PIN, HIGH); //turns on driver
+  pinMode(ALTI_SLEEP_PIN, OUTPUT);
+  digitalWrite(ALTI_SLEEP_PIN, HIGH); //turns on driver
 
-   pinMode(LIDAR_TRIG_PIN, OUTPUT); // Set pin 2 as trigger pin
-   digitalWrite(LIDAR_TRIG_PIN, LOW); // Set trigger LOW for continuous read
-   pinMode(LIDAR_MON_PIN, INPUT); // Set pin 3 as monitor pin
+  pinMode(LIDAR_TRIG_PIN, OUTPUT); // Set pin 2 as trigger pin
+  digitalWrite(LIDAR_TRIG_PIN, LOW); // Set trigger LOW for continuous read
+  pinMode(LIDAR_MON_PIN, INPUT); // Set pin 3 as monitor pin
 
-   Serial.begin(115200);  // Start the Serial monitor with speed of Moarspeed.bauds
+  Serial.begin(115200);  // Start the Serial monitor with speed of Moarspeed.bauds
 
-   //  Set Max Speed and Acceleration of each Steppers
-   StepperAlti.setMaxSpeed(500.0);      // Set Max Speed of X axis
-   StepperAlti.setAcceleration(500.0);  // Acceleration of X axis
+  //  Set Max Speed and Acceleration of each Steppers
+  StepperAlti.setMaxSpeed(500.0);      // Set Max Speed of X axis
+  StepperAlti.setAcceleration(500.0);  // Acceleration of X axis
 
-   StepperAzi.setMaxSpeed(250.0);      // Set Max Speed of Y axis slower for rotation
-   StepperAzi.setAcceleration(250.0);  // Acceleration of Y axis
+  StepperAzi.setMaxSpeed(250.0);      // Set Max Speed of Y axis slower for rotation
+  StepperAzi.setAcceleration(250.0);  // Acceleration of Y axis
 
 }
 
 
 void loop() {
-   for (Alti = 0; Alti < ALT_MAX; Alti++) {
-      StepperAlti.moveTo(Alti);  // Set new move position for X Stepper
+  
+  for (Alti = 0; Alti < ALT_MAX; Alti++) {
+    StepperAlti.moveTo(Alti);  // Set new move position for X Stepper
 
-      // Check if the Steppers have reached desired position
-      if (StepperAlti.distanceToGo()) {
-         StepperAlti.run();  // Move Stepper X into position
+    // Check if the Steppers have reached desired position
+    if (StepperAlti.distanceToGo()) {
+      StepperAlti.run();  // Move Stepper X into position
+    }
+
+
+    for (Azi = 0; Azi < AZI_MAX; Azi ++) {
+      StepperAzi.moveTo(Azi);  // Set new move position for Z Stepper
+
+      if (StepperAzi.distanceToGo()) {
+        StepperAzi.run();  // Move Stepper Z into position
       }
+      Serial.print("Azi Pos: ");
+      Serial.print(Azi);
+      Serial.print(" ");
+      Serial.print("Alti Pos: ");
+      Serial.print(Alti);
+      Serial.print(" ");
+      distance = __getDistance();
 
-      
-      for (Azi = 0; Azi < AZI_MAX; Azi ++) {
-        StepperAzi.moveTo(Azi);  // Set new move position for Z Stepper
+      Serial.print("Distance: ");
+      Serial.println(distance); // Print the distance measured by the LIDAR
+      delay(15);
 
-        if (StepperAzi.distanceToGo()) {
-           StepperAzi.run();  // Move Stepper Z into position
-        }
-        Serial.print("Azi Pos: ");
-        Serial.print(Azi);
-        Serial.print(" ");
-        distance = __getDistance();
+    }
 
-        Serial.print("Distance: ");
-        Serial.println(distance); // Print the distance measured by the LIDAR
-        delay(15);
+    // Serial.println("Done!"); // Debugging part 2
 
-      }
-
-      // Serial.println("Done!"); // Debugging part 2
-
-   }
-   StepperAzi.moveTo(0);
-   StepperAlti.moveTo(0);
-   if (StepperAzi.distanceToGo()) {
+  }
+  StepperAzi.moveTo(0);
+  StepperAlti.moveTo(0);
+  if (StepperAzi.distanceToGo()) {
     StepperAzi.run();
-   }
-   if (StepperAlti.distanceToGo()) {
-     StepperAlti.run();
-   }
+  }
+  if (StepperAlti.distanceToGo()) {
+    StepperAlti.run();
+  }
 
-   Serial.println("COMPLETED!");
+  Serial.println("COMPLETED!");
 }
 
 int __getDistance() {
-   pulseWidth = pulseIn(LIDAR_MON_PIN, HIGH); // Count how long the pulse is high in microseconds
-   return pulseWidth / 10;
+  pulseWidth = pulseIn(LIDAR_MON_PIN, HIGH); // Count how long the pulse is high in microseconds
+  return pulseWidth / 10;
 }
+
