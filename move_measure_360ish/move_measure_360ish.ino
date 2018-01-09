@@ -28,8 +28,6 @@ AccelStepper StepperAzi(1, AZI_STEP_PIN, AZI_DIR_PIN);
 int Alti;  // Used to store the X value entered in the Serial Monitor
 int Azi;  // Used to store the Z value entered in the Serial Monitor
 
-int move_finished = 1; // Used to check if move is completed
-
 void setup() {
 
   pinMode(AZI_SLEEP_PIN, OUTPUT);
