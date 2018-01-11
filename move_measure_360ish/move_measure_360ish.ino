@@ -63,6 +63,9 @@ void loop() {
       Serial.print("Azi Pos: ");
       Serial.print(Azi);
       Serial.print(" ");
+      Serial.print("Alti Pos: ");
+      Serial.print(Alti);
+      Serial.print(" ");
       distance = __getDistance();
 
       Serial.print("Distance: ");
@@ -74,6 +77,9 @@ void loop() {
       __moveMotor(StepperAzi, Azi);
       Serial.print("Azi Pos: ");
       Serial.print(abs(Azi));
+      Serial.print(" ");
+      Serial.print("Alti Pos: ");
+      Serial.print(Alti);
       Serial.print(" ");
       distance = __getDistance();
 
