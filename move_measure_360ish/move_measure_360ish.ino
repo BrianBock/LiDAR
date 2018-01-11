@@ -60,30 +60,22 @@ void loop() {
     for (Azi = 0; Azi < AZI_MAX; Azi ++) {
       __moveMotor(StepperAzi, Azi);
 
-      Serial.print("Azi Pos: ");
       Serial.print(Azi);
-      Serial.print(" ");
-      Serial.print("Alti Pos: ");
+      Serial.print(",");
       Serial.print(Alti);
-      Serial.print(" ");
+      Serial.print(",");
       distance = __getDistance();
-
-      Serial.print("Distance: ");
       Serial.println(distance); // Print the distance measured by the LIDAR
       delay(15);
 
     }
     for (Azi=-AZI_MAX; Azi <= 0; Azi++) {
       __moveMotor(StepperAzi, Azi);
-      Serial.print("Azi Pos: ");
       Serial.print(abs(Azi));
-      Serial.print(" ");
-      Serial.print("Alti Pos: ");
+      Serial.print(",");
       Serial.print(Alti);
-      Serial.print(" ");
+      Serial.print(",");
       distance = __getDistance();
-
-      Serial.print("Distance: ");
       Serial.println(distance); // Print the distance measured by the LIDAR
       delay(15);
       }
