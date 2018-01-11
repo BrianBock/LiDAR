@@ -53,6 +53,7 @@ void setup() {
 void loop() {
     if (Alti==ALT_MAX){
     Serial.println("COMPLETED!");
+    delay(100);
   }
 else{
   for (Azi = 0; Azi < AZI_MAX; Azi ++) {
