@@ -29,7 +29,6 @@ int Alti;  // Used to store the X value entered in the Serial Monitor
 int Azi;  // Used to store the Z value entered in the Serial Monitor
 
 void setup() {
-
   pinMode(AZI_SLEEP_PIN, OUTPUT);
   digitalWrite(AZI_SLEEP_PIN, HIGH); //turns on driver
 
@@ -51,42 +50,41 @@ void setup() {
 
 }
 
-
 void loop() {
-  for (Alti = 0; Alti < ALT_MAX; Alti++) {
-    __moveMotor(StepperAlti, Alti);
+    if (Alti==ALT_MAX){
+    Serial.println("COMPLETED!");
+  }
+else{
+  for (Azi = 0; Azi < AZI_MAX; Azi ++) {
+    __moveMotor(StepperAzi, Azi);
 
+    Serial.print(Azi);
+    Serial.print(",");
+    Serial.print(Alti);
+    Serial.print(",");
+    distance = __getDistance();
+    Serial.println(distance); // Print the distance measured by the LIDAR
+    delay(15);
+  }
+  Alti++;
+  __moveMotor(StepperAlti, Alti);
 
-    for (Azi = 0; Azi < AZI_MAX; Azi ++) {
-      __moveMotor(StepperAzi, Azi);
+  for (Azi=-AZI_MAX; Azi <= 0; Azi++) {
+    __moveMotor(StepperAzi, Azi);
+    Serial.print(abs(Azi));
+    Serial.print(",");
+    Serial.print(Alti);
+    Serial.print(",");
+    distance = __getDistance();
+    Serial.println(distance); // Print the distance measured by the LIDAR
+    delay(15);
+  }
+  Alti++;
+  __moveMotor(StepperAlti, Alti);
 
-      Serial.print(Azi);
-      Serial.print(",");
-      Serial.print(Alti);
-      Serial.print(",");
-      distance = __getDistance();
-      Serial.println(distance); // Print the distance measured by the LIDAR
-      delay(15);
-
-    }
-    for (Azi=-AZI_MAX; Azi <= 0; Azi++) {
-      __moveMotor(StepperAzi, Azi);
-      Serial.print(abs(Azi));
-      Serial.print(",");
-      Serial.print(Alti);
-      Serial.print(",");
-      distance = __getDistance();
-      Serial.println(distance); // Print the distance measured by the LIDAR
-      delay(15);
-      }
-
-      // Serial.println("Done!");  // Debugging part 2
-
-    }
-    //__moveMotor(StepperAlti, 0);
-
-  Serial.println("COMPLETED!");
 }
+}
+
 
 void __moveMotor(AccelStepper motor, int position) {
   motor.moveTo(position);
@@ -99,4 +97,8 @@ int __getDistance() {
   pulseWidth = pulseIn(LIDAR_MON_PIN, HIGH); // Count how long the pulse is high in microseconds
   return pulseWidth / 10;
 }
+
+
+
+
 
