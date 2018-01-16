@@ -10,7 +10,7 @@
 #define ALTI_DIR_PIN 8 // UNO Pin 8 connected to DIR pin of Easy Driver
 #define ALTI_SLEEP_PIN 10
 
-#define ALT_MAX 466
+#define ALT_MAX 266
 
 unsigned long pulseWidth;
 int distance;
@@ -18,10 +18,10 @@ int i;
 // AccelStepper Setup
 AccelStepper StepperAlti(1, ALTI_STEP_PIN, ALTI_DIR_PIN);   // 1 = Step/Dir interface
 
-int Alti;  // Used to store the X value entered in the Serial Monitor
+int Alti; // Used to store the X value entered in the Serial Monitor
 
 void setup() {
-
+  Alti = 0;
   pinMode(ALTI_SLEEP_PIN, OUTPUT);
   digitalWrite(ALTI_SLEEP_PIN, HIGH); //turns on driver
 
@@ -38,21 +38,18 @@ void setup() {
 
 
 void loop() {
-  for (Alti = -ALT_MAX; Alti<=0; Alti++) {
-    __moveMotor(StepperAlti, Alti);
-    Serial.print("Alti Pos: ");
-      Serial.print(abs(Alti));
-      Serial.print(" ");
-      distance = __getDistance();
-
-      Serial.print("Distance: ");
-      Serial.println(distance); // Print the distance measured by the LIDAR
-      delay(15);
+  if (Alti == -ALT_MAX) {
+    Serial.println("COMPLETED!");
+    delay(10000);
   }
-  //__moveMotor(StepperAlti, 0);
-
-  Serial.println("COMPLETED!");
+  else {
+    __moveMotor(StepperAlti, Alti);
+    Alti--;
+    Serial.println(abs(Alti));
+    delay(50);
+  }
 }
+
 
 void __moveMotor(AccelStepper motor, int position) {
   motor.moveTo(position);
