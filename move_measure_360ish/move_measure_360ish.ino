@@ -29,6 +29,7 @@ int Alti;  // Used to store the X value entered in the Serial Monitor
 int Azi;  // Used to store the Z value entered in the Serial Monitor
 
 void setup() {
+  Alti=0;
   pinMode(AZI_SLEEP_PIN, OUTPUT);
   digitalWrite(AZI_SLEEP_PIN, HIGH); //turns on driver
 
@@ -51,7 +52,7 @@ void setup() {
 }
 
 void loop() {
-    if (Alti==ALT_MAX){
+    if (abs(Alti)==ALT_MAX){
     Serial.println("COMPLETED!");
     delay(100);
   }
@@ -61,26 +62,26 @@ else{
 
     Serial.print(Azi);
     Serial.print(",");
-    Serial.print(Alti);
+    Serial.print(abs(Alti));
     Serial.print(",");
     distance = __getDistance();
     Serial.println(distance); // Print the distance measured by the LIDAR
-    delay(15);
+    delay(2);
   }
-  Alti++;
+  Alti--;
   __moveMotor(StepperAlti, Alti);
 
   for (Azi=-AZI_MAX; Azi <= 0; Azi++) {
     __moveMotor(StepperAzi, Azi);
     Serial.print(abs(Azi));
     Serial.print(",");
-    Serial.print(Alti);
+    Serial.print(abs(Alti));
     Serial.print(",");
     distance = __getDistance();
     Serial.println(distance); // Print the distance measured by the LIDAR
-    delay(15);
+    delay(2);
   }
-  Alti++;
+  Alti--;
   __moveMotor(StepperAlti, Alti);
 
 }
