@@ -54,7 +54,7 @@ void setup() {
 void loop() {
   if (abs(Alti) == ALT_MAX) {
     Serial.println("COMPLETED!");
-    delay(100);
+    delay(10000);
   }
   else {
     for (Azi = 0; Azi < AZI_MAX; Azi ++) {
