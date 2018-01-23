@@ -57,10 +57,10 @@ void loop() {
     delay(10000);
   }
   else {
-    for (Azi = 0; Azi < AZI_MAX; Azi ++) {
+    for (Azi = 0; Azi > -AZI_MAX; Azi--) {
       __moveMotor(StepperAzi, Azi);
 
-      Serial.print(Azi);
+      Serial.print(abs(Azi));
       Serial.print(",");
       Serial.print(abs(Alti));
       Serial.print(",");
@@ -71,7 +71,7 @@ void loop() {
     Alti--;
     __moveMotor(StepperAlti, Alti);
 
-    for (Azi = -AZI_MAX; Azi <= 0; Azi++) {
+    for (Azi = 0; Azi < AZI_MAX; Azi++) {
       __moveMotor(StepperAzi, Azi);
       Serial.print(abs(Azi));
       Serial.print(",");
