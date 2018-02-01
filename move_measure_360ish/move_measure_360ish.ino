@@ -71,7 +71,7 @@ void loop() {
     Alti--;
     __moveMotor(StepperAlti, Alti);
 
-    for (Azi = 0; Azi < AZI_MAX; Azi++) {
+    for (Azi = AZI_MAX; Azi > 0; Azi--) {
       __moveMotor(StepperAzi, Azi);
       Serial.print(abs(Azi));
       Serial.print(",");
