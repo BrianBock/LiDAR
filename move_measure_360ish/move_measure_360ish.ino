@@ -19,8 +19,8 @@
 #define AZI_M1_PIN 1
 
 
-#define AZI_MAX 800
-#define ALT_MAX 266
+#define AZI_MAX 1600
+#define ALT_MAX 532
 
 unsigned long pulseWidth;
 int distance;
