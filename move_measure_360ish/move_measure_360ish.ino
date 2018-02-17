@@ -9,10 +9,14 @@
 #define ALTI_STEP_PIN 9 // UNO Pin 9 connected to STEP pin of Easy Driver
 #define ALTI_DIR_PIN 8 // UNO Pin 8 connected to DIR pin of Easy Driver
 #define ALTI_SLEEP_PIN 10
+#define ALTI_MO_PIN 11
+#define ALTI_M1_PIN 12
 
 #define AZI_STEP_PIN 6
 #define AZI_DIR_PIN 5
 #define AZI_SLEEP_PIN 7
+#define AZI_MO_PIN 4
+#define AZI_M1_PIN 1
 
 
 #define AZI_MAX 800
@@ -30,6 +34,20 @@ int Azi;  // Used to store the Z value entered in the Serial Monitor
 
 void setup() {
   Alti = 0;
+  pinMode(AZI_MO_PIN, OUTPUT);
+  pinMode(ALTI_MO_PIN, OUTPUT);
+  digitalWrite(AZI_MO_PIN, LOW);
+  digitalWrite(AZI_MO_PIN, LOW);
+
+
+  pinMode(AZI_M1_PIN, OUTPUT);
+  pinMode(ALTI_M1_PIN, OUTPUT);
+
+  digitalWrite(AZI_M1_PIN, HIGH);
+  digitalWrite(ALTI_M1_PIN, HIGH);
+
+
+
   pinMode(AZI_SLEEP_PIN, OUTPUT);
   digitalWrite(AZI_SLEEP_PIN, HIGH); //turns on driver
 
