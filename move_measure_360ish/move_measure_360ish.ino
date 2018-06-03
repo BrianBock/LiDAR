@@ -18,13 +18,10 @@
 #define AZI_MO_PIN 4
 #define AZI_M1_PIN 1
 
-//Set Resolution by changing this section
-float resolution = .5; // half step resolution
-// Available resolutions are: 1, 0.5, 0.125, 0.0625
-float steps = 200 / resolution; //# of steps per rotation
-
-int AZI_MAX = steps;
-int ALT_MAX = steps / 3; //Alti goes ~120 degrees.
+float resolution;
+int steps;
+int AZI_MAX;
+int ALT_MAX;
 
 unsigned long pulseWidth;
 int distance;
@@ -37,6 +34,8 @@ int Alti;  // Used to store the X value entered in the Serial Monitor
 int Azi;  // Used to store the Z value entered in the Serial Monitor
 
 void setup() {
+  Serial.begin(115200);  // Start the Serial monitor with speed of Moarspeed.bauds
+
   Alti = 0;
   pinMode(AZI_MO_PIN, OUTPUT);
   pinMode(ALTI_MO_PIN, OUTPUT);
@@ -45,8 +44,15 @@ void setup() {
   pinMode(ALTI_M1_PIN, OUTPUT);
 
 
-
   //RESOLUTION SETTING
+  //Set Resolution by changing this section
+  resolution = 1; // step resolution
+  // Available resolutions are: 1, 2, 8, 16
+  steps = 200 * resolution; //# of steps per rotation
+
+  AZI_MAX = steps;
+  ALT_MAX = steps / 3; //Alti goes ~120 degrees.
+
   if (resolution == 1) {
     digitalWrite(AZI_MO_PIN, LOW);
     digitalWrite(AZI_MO_PIN, LOW);
@@ -54,21 +60,22 @@ void setup() {
     digitalWrite(AZI_M1_PIN, LOW);
     digitalWrite(ALTI_M1_PIN, LOW);
   }
-  else if (resolution == 0.5) {
+  else if (resolution == 2) {
     digitalWrite(AZI_MO_PIN, HIGH);
     digitalWrite(AZI_MO_PIN, HIGH);
 
     digitalWrite(AZI_M1_PIN, LOW);
     digitalWrite(ALTI_M1_PIN, LOW);
+    halfsies();
   }
-  else if (resolution == 0.125) {
+  else if (resolution == 8) {
     digitalWrite(AZI_MO_PIN, LOW);
     digitalWrite(AZI_MO_PIN, LOW);
 
     digitalWrite(AZI_M1_PIN, HIGH);
     digitalWrite(ALTI_M1_PIN, HIGH);
   }
-  else if (resolution == 0.0625) {
+  else if (resolution == 16) {
     digitalWrite(AZI_MO_PIN, HIGH);
     digitalWrite(AZI_MO_PIN, HIGH);
 
@@ -76,9 +83,7 @@ void setup() {
     digitalWrite(ALTI_M1_PIN, HIGH);
   }
   else {
-    Serial.println("Invalid Resolution chosen.");
-    delay(1000);
-    invalidResolution;
+    invalidResolution();
   }
 
 
@@ -93,7 +98,6 @@ void setup() {
   digitalWrite(LIDAR_TRIG_PIN, LOW); // Set trigger LOW for continuous read
   pinMode(LIDAR_MON_PIN, INPUT); // Set pin 3 as monitor pin
 
-  Serial.begin(115200);  // Start the Serial monitor with speed of Moarspeed.bauds
 
   //  Set Max Speed and Acceleration of each Steppers
   StepperAlti.setMaxSpeed(500.0);      // Set Max Speed of X axis
@@ -103,6 +107,14 @@ void setup() {
   StepperAzi.setAcceleration(250.0);  // Acceleration of Y axis
 
 }
+
+
+
+
+
+
+
+
 
 void loop() {
   if (abs(Alti) == ALT_MAX) {
@@ -141,6 +153,7 @@ void loop() {
 }
 
 
+
 void __moveMotor(AccelStepper motor, int position) {
   motor.moveTo(position);
   if (motor.distanceToGo()) {
@@ -148,17 +161,29 @@ void __moveMotor(AccelStepper motor, int position) {
   }
 }
 
+
+
+
 int __getDistance() {
   pulseWidth = pulseIn(LIDAR_MON_PIN, HIGH); // Count how long the pulse is high in microseconds
   return pulseWidth / 10;
 }
 
 
+
+
+
 void invalidResolution() {
   Serial.println("Invalid Resolution chosen");
   delay(1000);
-  invalidResolution;
+  invalidResolution();
 }
 
+
+void halfsies(){
+    Serial.println("Half Half Half!");
+  delay(1000);
+  halfsies();
+}
 
 
