@@ -18,9 +18,12 @@
 #define AZI_MO_PIN 4
 #define AZI_M1_PIN 1
 
+//Set Resolution by changing this section
+final float resolution = .5; // half step resolution
+final float steps = 200 / resolution; //# of steps per rotation
 
-#define AZI_MAX 1600
-#define ALT_MAX 532
+int AZI_MAX = steps;
+int ALT_MAX = steps / 3; //Alti goes ~120 degrees. 
 
 unsigned long pulseWidth;
 int distance;
