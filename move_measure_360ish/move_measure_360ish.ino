@@ -19,9 +19,9 @@
 #define AZI_M1_PIN 1
 
 //Set Resolution by changing this section
-final float resolution = .5; // half step resolution
+float resolution = .5; // half step resolution
 // Available resolutions are: 1, 0.5, 0.125, 0.0625
-final float steps = 200 / resolution; //# of steps per rotation
+float steps = 200 / resolution; //# of steps per rotation
 
 int AZI_MAX = steps;
 int ALT_MAX = steps / 3; //Alti goes ~120 degrees.
