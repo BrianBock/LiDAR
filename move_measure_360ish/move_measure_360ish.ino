@@ -20,10 +20,11 @@
 
 //Set Resolution by changing this section
 final float resolution = .5; // half step resolution
+// Available resolutions are: 1, 0.5, 0.125, 0.0625
 final float steps = 200 / resolution; //# of steps per rotation
 
 int AZI_MAX = steps;
-int ALT_MAX = steps / 3; //Alti goes ~120 degrees. 
+int ALT_MAX = steps / 3; //Alti goes ~120 degrees.
 
 unsigned long pulseWidth;
 int distance;
@@ -39,15 +40,46 @@ void setup() {
   Alti = 0;
   pinMode(AZI_MO_PIN, OUTPUT);
   pinMode(ALTI_MO_PIN, OUTPUT);
-  digitalWrite(AZI_MO_PIN, LOW);
-  digitalWrite(AZI_MO_PIN, LOW);
-
 
   pinMode(AZI_M1_PIN, OUTPUT);
   pinMode(ALTI_M1_PIN, OUTPUT);
 
-  digitalWrite(AZI_M1_PIN, HIGH);
-  digitalWrite(ALTI_M1_PIN, HIGH);
+
+
+  //RESOLUTION SETTING
+  if (resolution == 1) {
+    digitalWrite(AZI_MO_PIN, LOW);
+    digitalWrite(AZI_MO_PIN, LOW);
+
+    digitalWrite(AZI_M1_PIN, LOW);
+    digitalWrite(ALTI_M1_PIN, LOW);
+  }
+  else if (resolution == 0.5) {
+    digitalWrite(AZI_MO_PIN, HIGH);
+    digitalWrite(AZI_MO_PIN, HIGH);
+
+    digitalWrite(AZI_M1_PIN, LOW);
+    digitalWrite(ALTI_M1_PIN, LOW);
+  }
+  else if (resolution == 0.125) {
+    digitalWrite(AZI_MO_PIN, LOW);
+    digitalWrite(AZI_MO_PIN, LOW);
+
+    digitalWrite(AZI_M1_PIN, HIGH);
+    digitalWrite(ALTI_M1_PIN, HIGH);
+  }
+  else if (resolution == 0.0625) {
+    digitalWrite(AZI_MO_PIN, HIGH);
+    digitalWrite(AZI_MO_PIN, HIGH);
+
+    digitalWrite(AZI_M1_PIN, HIGH);
+    digitalWrite(ALTI_M1_PIN, HIGH);
+  }
+  else {
+    Serial.println("Invalid Resolution chosen.");
+    delay(1000);
+    invalidResolution;
+  }
 
 
 
@@ -122,6 +154,11 @@ int __getDistance() {
 }
 
 
+void invalidResolution() {
+  Serial.println("Invalid Resolution chosen");
+  delay(1000);
+  invalidResolution;
+}
 
 
 
